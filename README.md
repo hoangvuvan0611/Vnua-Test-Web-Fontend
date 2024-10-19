@@ -68,3 +68,45 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+
+### Các tem sử dụng của material 
+  Container,          // Component bọc ngoài giới hạn width tối đa và căn giữa nội dung
+  Box,                // Div với các utility props của Material-UI
+  Typography,         // Component để hiển thị text với các variant khác nhau
+  RadioGroup,         // Wrapper cho nhóm Radio buttons
+  Radio,              // Input Type Radio
+  FormControlLabel,   // Label wrapper cho input controls
+  Button,             // Component button
+  IconButton,         // Button dạng icon
+  Paper               // Container với box-shadow và background màu trắng
+
+    // Layout & Spacing
+    "py-4"          // padding-top và padding-bottom: 1rem
+    "mb-4"          // margin-bottom: 1rem
+    "p-4"           // padding: 1rem
+    "mt-4"          // margin-top: 1rem
+    "gap-4"         // khoảng cách giữa các grid/flex items: 1rem
+
+    // Grid System
+    "grid"          // display: grid
+    "grid-cols-1"   // một cột trên mobile
+    "md:grid-cols-12" // 12 cột từ breakpoint md trở lên
+    "md:col-span-3"   // chiếm 3 cột
+    "md:col-span-9"   // chiếm 9 cột
+
+    // Flexbox
+    "flex"          // display: flex
+    "items-center"  // align-items: center
+    "justify-between" // justify-content: space-between
+    "justify-end"     // justify-content: flex-end
+
+    // Colors
+    "text-emerald-600"  // text color
+    "bg-emerald-500"    // background color
+    "hover:bg-emerald-600" // background color khi hover
+
+    // Typography
+    "font-medium"    // font-weight: 500
+    "text-gray-600"  // text color gray
