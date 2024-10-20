@@ -5,6 +5,11 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Arial Narrow', Arial, sans-serif, Courier, monospace, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 .admin-layout {
   display: flex;
   flex-direction: column;
@@ -31,4 +36,9 @@
 .exam-main {
   flex: 1;
   padding: 20px;
+}
+
+.no-copy {
+  user-select: none; /* Ngăn việc chọn văn bản */
+  cursor: not-allowed; /* Hiển thị con trỏ cấm */
 }

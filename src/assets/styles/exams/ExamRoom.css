@@ -12,7 +12,7 @@ body {
     flex-direction: column;
     box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .2);
     border-radius: .1em;
-    font-size: 35px;
+    font-size: 2em;
     font-weight: bold;
     font-family: Verdana, Geneva, Tahoma, sans-serif, Tahoma, Geneva, Verdana, sans-serif, Tahoma, Geneva, Verdana, sans-serif, 'Arial Narrow', Arial, sans-serif !important;
 }

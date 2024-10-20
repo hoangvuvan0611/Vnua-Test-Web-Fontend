@@ -48,14 +48,16 @@ function ExamRoom() {
   
     // const time = formatTime(timeLeft);
 
-    const countToDate = new Date().setHours(new Date().getHours() + 1);
+    const countToDate = new Date().setSeconds(new Date().getSeconds() + 20);
     let previousTimeBetweenDates;
     setInterval(() => {
-      const currentDate = new Date()
-      const timeBetweenDates = Math.ceil((countToDate - currentDate) / 1000)
-      flipAllCards(timeBetweenDates)
-
-      previousTimeBetweenDates = timeBetweenDates
+      const currentDate = new Date();
+      const timeBetweenDates = Math.ceil((countToDate - currentDate) / 1000);
+      
+      if(timeBetweenDates >= 0) {
+        flipAllCards(timeBetweenDates);
+        previousTimeBetweenDates = timeBetweenDates;
+      }
     }, 1000);
 
     function flipAllCards(time) {
@@ -116,7 +118,7 @@ function ExamRoom() {
           }}>
             <Paper sx={{ p: 2, mb: 1 }}>
               <Typography variant="h6" sx={{ mb: 2, textAlign: 'center', fontWeight: 'bold' }}>
-                Bài thi tin học ứng dụng Công Nghệ Thông Tin
+                Bài thi tin học Công Nghệ Thông Tin
               </Typography>
               <Typography sx={{ color: 'emerald.600', fontWeight: 'medium', mb: 1 }}>
                 Thí sinh: Vũ Văn Hoàng
@@ -134,43 +136,43 @@ function ExamRoom() {
 
             <Paper sx={{ p: 2, mb: 2 }}>
               <Typography variant="h6" sx={{ mb: 2, textAlign: 'center' }}>Thời gian còn lại</Typography>
-              <div class="container">
-                <div class="container-segment">
-                  <div class="segment-title">Giờ</div>
-                  <div class="segment">
-                    <div class="flip-card" data-hours-tens>
-                      <div class="top">2</div>
-                      <div class="bottom">2</div>
+              <div className="container">
+                <div className="container-segment">
+                  <div className="segment-title">Giờ</div>
+                  <div className="segment">
+                    <div className="flip-card" style={{color: 'green'}} data-hours-tens>
+                      <div className="top">0</div>
+                      <div className="bottom">0</div>
                     </div>
-                    <div class="flip-card" data-hours-ones>
-                      <div class="top">4</div>
-                      <div class="bottom">4</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="container-segment">
-                  <div class="segment-title">Phút</div>
-                  <div class="segment">
-                    <div class="flip-card" data-minutes-tens>
-                      <div class="top">0</div>
-                      <div class="bottom">0</div>
-                    </div>
-                    <div class="flip-card" data-minutes-ones>
-                      <div class="top">0</div>
-                      <div class="bottom">0</div>
+                    <div className="flip-card" style={{color: 'green'}} data-hours-ones>
+                      <div className="top">0</div>
+                      <div className="bottom">0</div>
                     </div>
                   </div>
                 </div>
-                <div class="container-segment">
-                  <div class="segment-title">Giây</div>
-                  <div class="segment">
-                    <div class="flip-card" data-seconds-tens>
-                      <div class="top">0</div>
-                      <div class="bottom">0</div>
+                <div className="container-segment">
+                  <div className="segment-title">Phút</div>
+                  <div className="segment">
+                    <div className="flip-card" style={{color: 'green'}} data-minutes-tens>
+                      <div className="top">0</div>
+                      <div className="bottom">0</div>
                     </div>
-                    <div class="flip-card" data-seconds-ones>
-                      <div class="top">0</div>
-                      <div class="bottom">0</div>
+                    <div className="flip-card"  style={{color: 'green'}} data-minutes-ones>
+                      <div className="top">0</div>
+                      <div className="bottom">0</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="container-segment">
+                  <div className="segment-title">Giây</div>
+                  <div className="segment">
+                    <div className="flip-card"  style={{color: 'green'}} data-seconds-tens>
+                      <div className="top">0</div>
+                      <div className="bottom">0</div>
+                    </div>
+                    <div className="flip-card"  style={{color: 'green'}} data-seconds-ones>
+                      <div className="top">0</div>
+                      <div className="bottom">0</div>
                     </div>
                   </div>
                 </div>
@@ -178,7 +180,7 @@ function ExamRoom() {
             </Paper>
 
             <Paper sx={{ p: 2, mb: 4, maxWidth: '100%', overflow: 'hidden'}}>
-              <Typography variant="h6" sx={{ mb: 2 }}>Đáp án đã chọn</Typography>
+              <Typography variant="h6" sx={{ mb: 2, textAlign: 'center' }}>Đáp án đã chọn</Typography>
               <Box sx={{ 
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(35px, 1fr))',
@@ -217,55 +219,57 @@ function ExamRoom() {
         </Grid2>
 
         {/* Main Content */}
+
         <Grid2 item size={{ xs: 12, md: 9 }}>
           {[...Array(60)].map((_, index) => (
             <Paper key={index} sx={{ p: 4, mb: 4 }}>
-              <Typography sx={{ mb: 2 }}>
-                Câu {index + 1}:   Lima anakwan Ratu: Joko, Adi, Rimba, và Sato, selalu bermain bersama. Rumah 
-                mereka sekolah: Joko, selain memperoleh Sano, setelah di dimulai Adi. Rimba 
-                menjadi anak terakhir yang ditempui. Sementara rumah Ratu terletak di antara rumah Joko 
-                và rumah Adi. Berikut ini pernyataan yang benar adalah
-              </Typography>
-
+              <div className='no-copy'>
+                <Typography sx={{ mb: 2 }}>
+                  Câu {index + 1}:   Lima anakwan Ratu: Joko, Adi, Rimba, và Sato, selalu bermain bersama. Rumah 
+                  mereka sekolah: Joko, selain memperoleh Sano, setelah di dimulai Adi. Rimba 
+                  menjadi anak terakhir yang ditempui. Sementara rumah Ratu terletak di antara rumah Joko 
+                  và rumah Adi. Berikut ini pernyataan yang benar adalah
+                </Typography>
+              </div>
               <RadioGroup>
                 <FormControlLabel
                   value="1"
-                  control={<Radio />}
+                  control={<Radio color='success'/>}
                   label="Rumah Ratu terletak paling jauh"
                   sx={{ mb: 1 }}
                 />
                 <FormControlLabel
                   value="2"
-                  control={<Radio />}
+                  control={<Radio color='success'/>}
                   label="Rumah Adi terletak paling jauh"
                   sx={{ mb: 1 }}
                 />
                 <FormControlLabel
                   value="3"
-                  control={<Radio />}
+                  control={<Radio color='success'/>}
                   label="Rumah Rimba terletak paling jauh"
                   sx={{ mb: 1 }}
                 />
                 <FormControlLabel
                   value="4"
-                  control={<Radio />}
+                  control={<Radio color='success'/>}
                   label="Rumah Sano terletak paling dekat"
                   sx={{ mb: 1 }}
                 />
                 <FormControlLabel
                   value="5"
-                  control={<Radio />}
+                  control={<Radio color='success'/>}
                   label="Rumah Adi terletak paling dekat"
                 />
               </RadioGroup>
             </Paper>
           ))}
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 6 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, mb: 10 }}>
             <Button
               variant="contained"
-              sx={{ bgcolor: 'emerald.500', '&:hover': { bgcolor: 'emerald.600' } }}
+              sx={{ bgcolor: '#03ca5d', '&:hover': { bgcolor: 'emerald.600' } }}
             >
-              Submit Jawaban
+              Nộp bài
             </Button>
           </Box>
         </Grid2>
