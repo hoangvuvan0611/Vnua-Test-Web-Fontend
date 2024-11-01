@@ -1,7 +1,7 @@
-function ExamManagement() {
+const ExamManagement = () => {
     return (
         <div>
-
+            Exam kjdhfsdfskdfhskdjfhskdjfhsjhfdsjf Hoàngdfs
         </div>
     );
 }
