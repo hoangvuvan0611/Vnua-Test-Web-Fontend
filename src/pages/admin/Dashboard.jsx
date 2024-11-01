@@ -1,18 +1,30 @@
-import { Button, Container, Grid2 } from "@mui/material";
+import { Button, Container, Grid2, Typography, Box } from "@mui/material";
 import { red } from "@mui/material/colors";
 import { Card, CardContent, CardHeader } from "@mui/material";
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import logoWorking from '../../assets/images/logos/Working-bro.svg'
 
 import React from "react";
 import MyAppBar from "../../components/admin/appbar/MyAppBar";
 
 const Dashboard = () => {
     return (
-        <div className="bg-white">
-            <div className="">
-                <MyAppBar label={'đ'}>Trang tổng quan</MyAppBar>
+        <div className="bg-white" style={{position: 'relative'}}>
+            <div className="shadow-sm bg-white" style={{ position: 'sticky', top: 0, left: 0, right: 0, zIndex: 39 }}>
+                <MyAppBar label={'Trang tổng quan'}/>
             </div>
+
+            {/* Welcome Section */}
+            <Box sx={{ bgcolor: '#e0ffe2', height: 200, borderRadius: 2, p: 3, display: 'flex', alignItems: 'center', mt: 4, position: 'relative', ml: 3, mr: 3 }}>
+                <Box sx={{marginLeft: 10}}>
+                    <Typography variant="h4" fontWeight="bold">Chào, Hoàng</Typography>
+                    <Typography variant="subtitle1" color="textSecondary">Sẵn sàng để hoàn thành công việc của bạn ngày hôm nay?</Typography>
+                </Box>
+                <Box component="img" src={logoWorking} alt="Illustration" 
+                sx={{ width: 300, marginLeft: 'auto', position: 'absolute', right: 10}} />
+            </Box>
+
             {/* Main content: Responsive */}
             <div className="flex-1 p-4 lg:p-8 ml-0 lg:ml-64">
                 {/* Header - responsive */}
