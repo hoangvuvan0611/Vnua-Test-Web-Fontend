@@ -7,23 +7,26 @@ import logoSupport from '../../../assets/images/logos/Business support-bro.svg';
 import { Avatar } from "@mui/material";
 import { SidebarData } from "./SidebarData";
 import {Link, useNavigate} from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
 
 function Sidebar({isOpen, onToggle}) {
-
+    const theme = useTheme();
     const navigate = useNavigate();
-
+    const mode = theme.palette.mode;
+    
     return (
-        <div>
+        <div style={{backgroundColor: theme.palette.background.default}}>
             {/* Menu button: Show when used in mobile device */}
             <button 
                 onClick={onToggle}
+                style={{backgroundColor: theme.palette.background.default}}
                 className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-lg"
             >
                 {isOpen ? <Close className="h-6 w-6" /> : <Menu className="h-6 w-6"/>}
             </button>
 
             {/* Side bar: Responsive */}
-            <div 
+            <div style={{backgroundColor: theme.palette.background.default}}
                 className={`
                     fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-sm transform
                     ${isOpen ? 'translate-x-0' : '-translate-x-full'}
@@ -42,7 +45,7 @@ function Sidebar({isOpen, onToggle}) {
                                     {SidebarData.map((val, key) => {
                                         return <Link key={key} style={{textDecoration: 'none'}} to={val.link} onClick={() => {navigate.pathname = val.link}}>
                                             <li id={window.location.pathname === val.link ? "active" : ""} 
-                                            className="flex items-center hover:bg-gray-100 p-2 rounded sidebar-item">
+                                            className={`flex items-center ${mode === 'dark' ? ' hover:bg-gray-500' : ' hover:bg-gray-100'} p-2 rounded sidebar-item`}>
                                                 <div className="mr-4">
                                                     {val.icon}
                                                 </div>
