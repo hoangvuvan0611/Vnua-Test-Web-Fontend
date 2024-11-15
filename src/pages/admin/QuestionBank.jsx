@@ -157,16 +157,14 @@ const QuestionBank = () => {
     });
 
     return (
-        <div className="bg-white" style={{ position: 'relative' }}>
-            <div className="shadow-sm bg-white" style={{ position: 'sticky', top: 0, left: 0, right: 0, zIndex: 39 }}>
+        <div style={{ position: 'relative' }}>
+            <div className="shadow-sm" style={{ position: 'sticky', top: 0, left: 0, right: 0, zIndex: 39 }}>
                 <MyAppBar label={'Quản lý Ngân hàng Câu hỏi'} />
             </div>
 
             <Box sx={{ p: 3 }}>
-
-                {/* Thanh công cụ */}
-                <Paper sx={{ p: 2, mb: 3 }}>
-                    <Grid2 container spacing={2} alignItems="center">
+                {/* Thanh tác vụ */}
+                <Grid2 container spacing={2} alignItems="center" sx={{ mb: 3}}>
                         <Grid2 item xs={12} md={4}>
                             <TextField
                                 fullWidth
@@ -216,6 +214,7 @@ const QuestionBank = () => {
                                         variant="contained"
                                         startIcon={<AddIcon />}
                                         onClick={() => handleOpenDialog()}
+                                        sx={{textTransform: 'none'}}
                                     >
                                         Thêm mới
                                     </Button>
@@ -226,8 +225,9 @@ const QuestionBank = () => {
                                         variant="contained"
                                         startIcon={<FileUploadIcon />}
                                         onClick={() => handleOpenDialogUploadFile()}
+                                        sx={{textTransform: 'none'}}
                                     >
-                                        Tải file lên
+                                        Tải lên file câu hỏi
                                     </Button>
                                 </Grid2>
                                 <Grid2 item xs={4}>
@@ -235,14 +235,14 @@ const QuestionBank = () => {
                                         fullWidth
                                         variant="contained"
                                         startIcon={<FileDownloadIcon />}
+                                        sx={{textTransform: 'none'}}
                                     >
-                                        Xuất file
+                                        Xuất file câu hỏi
                                     </Button>
                                 </Grid2>
                             </Grid2>
                         </Grid2>
                     </Grid2>
-                </Paper>
 
                 {/* Bảng câu hỏi */}
                 <TableContainer component={Paper}>
@@ -424,8 +424,8 @@ const QuestionBank = () => {
                         )}
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleCloseDialog}>Hủy</Button>
-                        <Button onClick={handleSaveQuestion} variant="contained">
+                        <Button onClick={handleCloseDialog} sx={{textTransform: 'none'}}>Hủy</Button>
+                        <Button onClick={handleSaveQuestion} variant="contained" sx={{textTransform: 'none'}}>
                             {selectedQuestion ? 'Cập nhật' : 'Thêm mới'}
                         </Button>
                     </DialogActions>
@@ -449,7 +449,7 @@ const QuestionBank = () => {
                         </Button>
                     </DialogActions>
                 </Dialog> */}
-                <DialogUploadFile open={openDialogUploadFile} onClose={handleCloseDialog}/>
+                <DialogUploadFile open={openDialogUploadFile} onClose={handleCloseDialogUploadFile} title={"Tải file lên file câu hỏi"}/>
             </Box>
         </div>
     );
