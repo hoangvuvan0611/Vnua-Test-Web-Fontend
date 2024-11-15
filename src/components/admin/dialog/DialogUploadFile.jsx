@@ -20,8 +20,10 @@ import {
     Info as InfoIcon,
     CheckCircleOutline,
     ErrorOutline,
+    Article,
+    South
 } from '@mui/icons-material';
-import axios from "axios";
+import api from "../../../services/api/axios.config";
 
 
 // Style commonent vùng upload
@@ -50,12 +52,18 @@ const uploadAnimation = keyframes`
 
 const DialogUploadFile = ({open, onClose, title}) => {
 
-    const [ files, setFiles ] = useState([]);
+    const [ file, setFile ] = useState(null);
     const [ uploading, setUploading ] = useState(false);
-    const [ progress, setProgress ] = useState(0);
     const [ uploadError, setUploadError ] = useState(null);
-    const [ uploadProgress, setUploadProgress ] = useState(0);
-    const [ serverProcessingTime, setServerProcessingTime ] = useState(0); 
+    const [ uploadProgress, setUploadProgress ] = useState(0); 
+    const [ questions, setQuestions ] = useState(null);
+
+    const closeDialog = () => {
+        onClose();
+        setFile(null);
+        setUploadProgress(0);
+        setUploadError(null);
+    }
 
     const allowedFileTypes = [
         '.xls',
@@ -65,17 +73,16 @@ const DialogUploadFile = ({open, onClose, title}) => {
     ];
 
     const handleFileSelect = (event) => {
-        const selectedFile = Array.from(event.target.files)
-        setFiles(selectedFile);
+        setFile(event.target.files[0]);
     }
 
     const uploadFile = async () => {
         setUploading(true);
-        setProgress(0);
+        setUploadProgress(0);
         setUploadError(null);
 
         const formData = new FormData();
-        formData.append('file', files);
+        formData.append('file', file);
 
         const uploadConfig = {
             onUploadProgress: (progressEvent) => {
@@ -85,34 +92,18 @@ const DialogUploadFile = ({open, onClose, title}) => {
         };
 
         try {
-            const startTime = performance.now();
-            await axios.post('/file/readFile', formData, uploadConfig);
-            const endTime = performance.now();
-
-            setServerProcessingTime(endTime - startTime);
-            const isSuccess = Math.random() < 0.8;
-
-            for (let i = 0; i <= 100; i+= 10) {
-                await new Promise(resolve => setTimeout(resolve, 500));
-                setProgress(i);
-            }
-    
-            if (isSuccess) {
-                setUploadError(null);
-            } else {
-                setUploadError("Có lỗi xảy ra khi tải lên. Vui lòng thử lại!");
-            }
-
+            const response = await api.post('/file/readFile', formData, uploadConfig);
+            setQuestions(response.dataList);
+            console.log(response.data.dataList)
         } catch (error) {
             setUploadError("Có lỗi xảy ra khi tải lên. Vui lòng thử lại!");
         } finally {
             setUploading(false);
-            setProgress(100);
         }
     };
 
     return (
-        <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+        <Dialog open={open} onClose={closeDialog} maxWidth="sm" fullWidth>
             <DialogTitle >
                 {title}
             </DialogTitle>
@@ -152,26 +143,25 @@ const DialogUploadFile = ({open, onClose, title}) => {
                 </UploadBox>
 
                 {/* selected files */}
-                {files.length > 0 && (
+                {file !== null && (
                     <List sx={{mt: 1}}>
-                        {files.map((file, index) => (
-                            <ListItem key={index}>
-                                <ListItemIcon>
-                                    {progress === 100 ? (
-                                        uploadError ? (
-                                            <ErrorOutline color="error"/>
-                                        ) : (
-                                            <CheckCircleOutline color="success"/>
-                                        )) : (
-                                            null
-                                        )}
-                                </ListItemIcon>
-                                <ListItemText 
-                                    primary={file.name}
-                                    secondary={`${(file.size / 1024 / 1024).toFixed(2)} MB`}
-                                />
-                            </ListItem>
-                        ))}
+                        <ListItem>
+                            <ListItemIcon>
+                                {uploadProgress === 100 ? (
+                                    uploadError ? (
+                                        <ErrorOutline color="error"/>
+                                    ) : (
+                                        <CheckCircleOutline color="success"/>
+                                    )) : (
+                                        <Article/>
+                                    )}
+                            </ListItemIcon>
+                            <ListItemText 
+                                primary={file.name}
+                                secondary={`${(file.size / 1024 / 1024).toFixed(2)} MB`}
+                                sx={{color: 'Highlight'}}
+                            />
+                        </ListItem>
                     </List>
                 )}
 
@@ -180,7 +170,7 @@ const DialogUploadFile = ({open, onClose, title}) => {
                     <Box sx={{mt: 2}}>
                         <LinearProgress 
                             variant="determinate"
-                            value={progress}
+                            value={uploadProgress}
                             sx={{mb: 1}}
                         />
                         <Typography variant="body2" align="center">
@@ -198,11 +188,11 @@ const DialogUploadFile = ({open, onClose, title}) => {
                 )}
             </DialogContent>
 
-            <DialogActions>
-                <Button onClick={onClose} variant="contained" sx={{textTransform: 'none'}}>Hủy</Button>
+            <DialogActions sx={{mb: 3, mr: 2}}>
+                <Button onClick={closeDialog} variant="contained" sx={{textTransform: 'none'}}>Hủy</Button>
                 <Button 
                     onClick={uploadFile}
-                    disabled={files.length === 0 || uploading}
+                    disabled={file === null || uploading}
                     variant="contained"
                     startIcon={<CloudUploadIcon/>}
                     sx={{textTransform: 'none'}}
