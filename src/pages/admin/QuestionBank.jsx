@@ -265,15 +265,15 @@ const QuestionBank = () => {
                             />
                             </TableCell>
                             <TableCell align="center">
-                            <IconButton 
-                                onClick={() => handleOpenDialog(question)}
-                            >
+                                <IconButton 
+                                    onClick={() => handleOpenDialog(question)}
+                                >
                                 <EditIcon />
-                            </IconButton>
-                            <IconButton
-                                color="error"
-                                onClick={() => handleDeleteQuestion(question.id)}
-                            >
+                                </IconButton>
+                                <IconButton
+                                    color="error"
+                                    onClick={() => handleDeleteQuestion(question.id)}
+                                >
                                 <DeleteIcon />
                             </IconButton>
                             </TableCell>
