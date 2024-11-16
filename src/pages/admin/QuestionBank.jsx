@@ -35,6 +35,7 @@ import {
     FileDownload as FileDownloadIcon,
 } from '@mui/icons-material';
 import DialogUploadFile from "../../components/admin/dialog/DialogUploadFile";
+import QuestionAnswerTable from "../../components/admin/table/QuestionAnswerTable";
 
 const QuestionBank = () => {
     // State cho danh sách câu hỏi
@@ -148,13 +149,63 @@ const QuestionBank = () => {
         setQuestions(questions.filter(q => q.id !== id));
     };
 
+        // Dữ liệu mẫu
+        const rows = [
+            {
+                id: '234342',
+                content: 'Đâu là thủ đô của Việt Nam?',
+                subject: 'Địa lý',
+                chapter: 'Chương 1',
+                type: '1 đáp án',
+                level: 'Dễ',
+                answers: [
+                    {
+                    content: 'Hà Nội',
+                    isCorrect: true,
+                    explanation: 'Hà Nội là thủ đô của Việt Nam từ năm 1945'
+                    },
+                    {
+                    content: 'TP. Hồ Chí Minh',
+                    isCorrect: false,
+                    explanation: 'TP. Hồ Chí Minh là thành phố lớn nhất nhưng không phải thủ đô'
+                    },
+                    {
+                    content: 'Đà Nẵng',
+                    isCorrect: false,
+                    explanation: 'Đà Nẵng là thành phố trực thuộc trung ương'
+                    },
+                ],
+            },
+            {
+                id: '234362',
+                content: 'Quá trình nào sau đây là quá trình tổng hợp?',
+                subject: 'Hóa học',
+                chapter: 'Chương 2',
+                type: '1 đáp án',
+                level: 'Khó',
+                answers: [
+                    {
+                    content: '2H2 + O2 → 2H2O',
+                    isCorrect: true,
+                    explanation: 'Đây là phản ứng tổng hợp nước từ khí H2 và O2'
+                    },
+                    {
+                    content: 'CaCO3 → CaO + CO2',
+                    isCorrect: false,
+                    explanation: 'Đây là phản ứng phân hủy'
+                    },
+                ],
+            },
+        ];
+
     // Lọc câu hỏi
-    const filteredQuestions = questions.filter(question => {
+    const filteredQuestions = rows.filter(question => {
         const matchesSearch = question.content.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesSubject = filterSubject === 'all' || question.subject === filterSubject;
         const matchesLevel = filterLevel === 'all' || question.level === filterLevel;
         return matchesSearch && matchesSubject && matchesLevel;
     });
+
 
     return (
         <div style={{ position: 'relative' }}>
@@ -165,87 +216,89 @@ const QuestionBank = () => {
             <Box sx={{ p: 3 }}>
                 {/* Thanh tác vụ */}
                 <Grid2 container spacing={2} alignItems="center" sx={{ mb: 3}}>
-                        <Grid2 item xs={12} md={4}>
-                            <TextField
-                                fullWidth
-                                placeholder="Tìm kiếm câu hỏi..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                InputProps={{
-                                    startAdornment: <SearchIcon sx={{ color: 'action.active', mr: 1 }} />,
-                                }}
-                            />
-                        </Grid2>
-                        <Grid2 item xs={12} md={2}>
-                            <FormControl fullWidth>
-                                <InputLabel>Môn học</InputLabel>
-                                <Select
-                                    value={filterSubject}
-                                    label="Môn học"
-                                    onChange={(e) => setFilterSubject(e.target.value)}
+                    <Grid2 item xs={12} md={4}>
+                        <TextField
+                            fullWidth
+                            placeholder="Tìm kiếm câu hỏi..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            InputProps={{
+                                startAdornment: <SearchIcon sx={{ color: 'action.active', mr: 1 }} />,
+                            }}
+                        />
+                    </Grid2>
+                    <Grid2 item xs={12} md={2}>
+                        <FormControl fullWidth>
+                            <InputLabel>Môn học</InputLabel>
+                            <Select
+                                value={filterSubject}
+                                label="Môn học"
+                                onChange={(e) => setFilterSubject(e.target.value)}
+                            >
+                                <MenuItem value="all">Tất cả</MenuItem>
+                                <MenuItem value="math">Toán học</MenuItem>
+                                <MenuItem value="physics">Vật lý</MenuItem>
+                                <MenuItem value="chemistry">Hóa học</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid2>
+                    <Grid2 item xs={12} md={2}>
+                        <FormControl fullWidth>
+                            <InputLabel>Độ khó</InputLabel>
+                            <Select
+                                value={filterLevel}
+                                label="Độ khó"
+                                onChange={(e) => setFilterLevel(e.target.value)}
+                            >
+                                <MenuItem value="all">Tất cả</MenuItem>
+                                <MenuItem value="easy">Dễ</MenuItem>
+                                <MenuItem value="medium">Trung bình</MenuItem>
+                                <MenuItem value="hard">Khó</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid2>
+                    <Grid2 item xs={12} md={4}>
+                        <Grid2 container spacing={1}>
+                            <Grid2 item xs={4}>
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    startIcon={<AddIcon />}
+                                    onClick={() => handleOpenDialog()}
+                                    sx={{textTransform: 'none'}}
                                 >
-                                    <MenuItem value="all">Tất cả</MenuItem>
-                                    <MenuItem value="math">Toán học</MenuItem>
-                                    <MenuItem value="physics">Vật lý</MenuItem>
-                                    <MenuItem value="chemistry">Hóa học</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid2>
-                        <Grid2 item xs={12} md={2}>
-                            <FormControl fullWidth>
-                                <InputLabel>Độ khó</InputLabel>
-                                <Select
-                                    value={filterLevel}
-                                    label="Độ khó"
-                                    onChange={(e) => setFilterLevel(e.target.value)}
+                                    Thêm mới
+                                </Button>
+                            </Grid2>
+                            <Grid2 item xs={4}>
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    startIcon={<FileUploadIcon />}
+                                    onClick={() => handleOpenDialogUploadFile()}
+                                    sx={{textTransform: 'none'}}
                                 >
-                                    <MenuItem value="all">Tất cả</MenuItem>
-                                    <MenuItem value="easy">Dễ</MenuItem>
-                                    <MenuItem value="medium">Trung bình</MenuItem>
-                                    <MenuItem value="hard">Khó</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid2>
-                        <Grid2 item xs={12} md={4}>
-                            <Grid2 container spacing={1}>
-                                <Grid2 item xs={4}>
-                                    <Button
-                                        fullWidth
-                                        variant="contained"
-                                        startIcon={<AddIcon />}
-                                        onClick={() => handleOpenDialog()}
-                                        sx={{textTransform: 'none'}}
-                                    >
-                                        Thêm mới
-                                    </Button>
-                                </Grid2>
-                                <Grid2 item xs={4}>
-                                    <Button
-                                        fullWidth
-                                        variant="contained"
-                                        startIcon={<FileUploadIcon />}
-                                        onClick={() => handleOpenDialogUploadFile()}
-                                        sx={{textTransform: 'none'}}
-                                    >
-                                        Tải lên file câu hỏi
-                                    </Button>
-                                </Grid2>
-                                <Grid2 item xs={4}>
-                                    <Button
-                                        fullWidth
-                                        variant="contained"
-                                        startIcon={<FileDownloadIcon />}
-                                        sx={{textTransform: 'none'}}
-                                    >
-                                        Xuất file câu hỏi
-                                    </Button>
-                                </Grid2>
+                                    Tải lên file câu hỏi
+                                </Button>
+                            </Grid2>
+                            <Grid2 item xs={4}>
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    startIcon={<FileDownloadIcon />}
+                                    sx={{textTransform: 'none'}}
+                                >
+                                    Xuất file câu hỏi
+                                </Button>
                             </Grid2>
                         </Grid2>
                     </Grid2>
+                </Grid2>
+
+                <QuestionAnswerTable rowData={filteredQuestions}/>
 
                 {/* Bảng câu hỏi */}
-                <TableContainer component={Paper}>
+                {/* <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
@@ -301,7 +354,7 @@ const QuestionBank = () => {
                             ))}
                         </TableBody>
                     </Table>
-                </TableContainer>
+                </TableContainer> */}
 
                 {/* Dialog thêm/sửa câu hỏi */}
                 <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth>
@@ -431,24 +484,7 @@ const QuestionBank = () => {
                     </DialogActions>
                 </Dialog>
 
-                {/* Dialog tải lên file để import câu hỏi */}
-                {/* <Dialog open={openDialogUploadFile} onClose={handleCloseDialogUploadFile} maxWidth="md" fullWidth>
-                    <DialogTitle>
-                        Tải lên file chứa danh sách câu hỏi
-                    </DialogTitle>
-                    <DialogContent>
-                        
-                    </DialogContent>
-                    <DialogActions>
-                        <Button 
-                            onClick={handleCloseDialogUploadFile}
-                            variant="contained"
-                        >Hủy</Button>
-                        <Button onClick={handleSaveQuestion} variant="contained">
-                            {selectedQuestion ? 'Cập nhật' : 'Thêm mới'}
-                        </Button>
-                    </DialogActions>
-                </Dialog> */}
+                {/* Dialog import file cau hoi */}
                 <DialogUploadFile open={openDialogUploadFile} onClose={handleCloseDialogUploadFile} title={"Tải file lên file câu hỏi"}/>
             </Box>
         </div>
