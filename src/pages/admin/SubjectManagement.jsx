@@ -1,22 +1,23 @@
 import React from "react";
 import MyAppBar from "../../components/admin/appbar/MyAppBar";
-import { Avatar, Button, ButtonBase, Card, CardContent, Chip, Grid2, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
+import { Avatar, Button, Card, CardContent, Chip, Grid2, IconButton, List, ListItem, Table, TableBody, TableCell, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
 import logoSubject from '../../assets/images/logos/Thesis-rafiki.svg';
 import { green } from "@mui/material/colors";
+import { BookmarkBorderOutlined, Delete, DeleteForever, EditAttributes, EditNote, EditRoad } from "@mui/icons-material";
 
 const SubjectManagement = () => {
 
     const theme = useTheme();
 
     const orderItems = [
-        { name: 'Scrambled eggs with toast', qty: 1, price: 16.99 },
-        { name: 'Smoked Salmon Bagel', qty: 1, price: 18.49 },
-        { name: 'Belgian Waffles', qty: 2, price: 38.98 },
-        { name: 'Classic Lemonade', qty: 1, price: 12.49 },
+        { name: 'Giới thiệu tổng quan', qty: 1, bookMark: true },
+        { name: 'Hệ điều hành là gì', qty: 1, bookMark: true },
+        { name: 'Quản lý tiến trình', qty: 2, bookMark: true },
+        { name: 'Lập lịch cho CPU', qty: 1, bookMark: true },
     ];
 
-    const totalAmount = orderItems.reduce((total, item) => total + item.price, 0);
+    const totalAmount = orderItems.reduce((total, item) => total + item.qty, 0);
 
     return (
         <div className="subjectManagement" style={{position: 'relative'}}>
@@ -41,19 +42,22 @@ const SubjectManagement = () => {
             </Grid2>
 
             {/* Subject Card session */}
-            <Grid2 container spacing={{ xs: 2, md: 4 }} columns={{ xs: 4, sm: 8, md: 12, xl: 12 }} sx={{ml: 3, mr: 3}}>
+            <Grid2 container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12, xl: 12 }} sx={{ml: 3, mr: 3}}>
                 {Array.from(Array(6)).map((_, index) => (
                     <Grid2 key={index} size={{ xs: 2, sm: 4, md: 4, xl: 3 }}>
                         <Card sx={{ maxWidth: 400, margin: 'auto', borderRadius: 2, boxShadow: 3, padding: 2 }}>
                             <CardContent>
                                 <Grid2 container justifyContent="space-between" alignItems="center">
-                                    <Avatar sx={{ bgcolor: green[500] }} variant="rounded">
-                                        VV
-                                    </Avatar>
-                                    <Typography variant="h6">
-                                        A4
-                                    </Typography>
-                                    <Chip label="Ready" color="success" />
+                                    <Grid2 size={3}>
+                                        <Avatar sx={{ bgcolor: green[500] }} variant="rounded">
+                                            VV
+                                        </Avatar>
+                                    </Grid2>
+                                    <Grid2 size={9}>
+                                        <Typography variant="h6" textTransform={'capitalize'}>
+                                            Nguyên Lý Hệ Điều Hành
+                                        </Typography>
+                                    </Grid2>
                                 </Grid2>
                                 <Typography variant="subtitle2" color="textSecondary">
                                 Order #925 / Dine In
@@ -67,36 +71,50 @@ const SubjectManagement = () => {
                                 <Table size="small">
                                     <TableHead>
                                         <TableRow>
-                                        <TableCell>Items</TableCell>
-                                        <TableCell align="center">Qty</TableCell>
-                                        <TableCell align="right">Price</TableCell>
+                                        <TableCell>Chương</TableCell>
+                                        <TableCell align="center">Câu hỏi</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
                                         {orderItems.map((item, index) => (
-                                        <TableRow key={index}>
-                                            <TableCell>{item.name}</TableCell>
-                                            <TableCell align="center">{item.qty}</TableCell>
-                                            <TableCell align="right">${item.price.toFixed(2)}</TableCell>
-                                        </TableRow>
+                                            <TableRow key={index}>
+                                                <TableCell>{item.name}</TableCell>
+                                                <TableCell align="center">{item.qty}</TableCell>
+                                            </TableRow>
                                         ))}
-                                        <TableRow>
-                                        <TableCell colSpan={2}>Total</TableCell>
-                                        <TableCell align="right">${totalAmount.toFixed(2)}</TableCell>
+                                        <TableRow >
+                                            <TableCell >Total</TableCell>
+                                            <TableCell align="right">${totalAmount}</TableCell>
                                         </TableRow>
                                     </TableBody>
                                 </Table>
 
-                                <Grid2 container spacing={2} sx={{ mt: 2 }}>
+                                <Grid2 container alignItems={'center'} justifyContent={'space-around'}  sx={{ mt: 2 }}>
                                     <Grid2 item xs={6}>
-                                        <Button variant="outlined" fullWidth>
-                                        See Details
+                                        <Button variant="contained" fullWidth>
+                                        Xem chi tiết
                                         </Button>
                                     </Grid2>
                                     <Grid2 item xs={6}>
-                                        <Button variant="contained" color="warning" fullWidth>
-                                        Pay Bills
-                                        </Button>
+                                        <List>
+                                            <ListItem>
+                                                <Tooltip title="Sửa">
+                                                    <IconButton>
+                                                        <EditNote color="warning"/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title="Xóa">
+                                                    <IconButton>
+                                                        <Delete color="error"/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title="Yêu thích">
+                                                    <IconButton>
+                                                        <BookmarkBorderOutlined color="success"/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </ListItem>
+                                        </List>
                                     </Grid2>
                                 </Grid2>
                             </CardContent>

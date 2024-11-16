@@ -14,6 +14,8 @@ import {
     LinearProgress,
     DialogActions,
     keyframes,
+    Tooltip,
+    IconButton,
 } from '@mui/material';
 import {
     CloudUpload as CloudUploadIcon,
@@ -21,7 +23,9 @@ import {
     CheckCircleOutline,
     ErrorOutline,
     Article,
-    South
+    South,
+    DeleteForever,
+    Delete
 } from '@mui/icons-material';
 import api from "../../../services/api/axios.config";
 
@@ -71,6 +75,11 @@ const DialogUploadFile = ({open, onClose, title}) => {
         '.json',
         '.csv'
     ];
+
+    const deleteFileSelected = () => {
+        setFile(null);
+        setUploadError(null);
+    }
 
     const handleFileSelect = (event) => {
         setFile(event.target.files[0]);
@@ -144,25 +153,28 @@ const DialogUploadFile = ({open, onClose, title}) => {
 
                 {/* selected files */}
                 {file !== null && (
-                    <List sx={{mt: 1}}>
-                        <ListItem>
-                            <ListItemIcon>
-                                {uploadProgress === 100 ? (
-                                    uploadError ? (
-                                        <ErrorOutline color="error"/>
-                                    ) : (
-                                        <CheckCircleOutline color="success"/>
-                                    )) : (
-                                        <Article/>
-                                    )}
-                            </ListItemIcon>
-                            <ListItemText 
-                                primary={file.name}
-                                secondary={`${(file.size / 1024 / 1024).toFixed(2)} MB`}
-                                sx={{color: 'Highlight'}}
-                            />
-                        </ListItem>
-                    </List>
+                    <ListItem>
+                        <ListItemIcon>
+                            {uploadProgress === 100 ? (
+                                uploadError ? (
+                                    <ErrorOutline color="error"/>
+                                ) : (
+                                    <CheckCircleOutline color="success"/>
+                                )) : (
+                                    <Article/>
+                                )}
+                        </ListItemIcon>
+                        <ListItemText 
+                            primary={file.name}
+                            secondary={`${(file.size / 1024 / 1024).toFixed(2)} MB`}
+                            sx={{color: 'Highlight'}}
+                        />
+                        <Tooltip title="Xóa file">
+                            <IconButton onClick={deleteFileSelected}>
+                                <Delete color="action"/>
+                            </IconButton>
+                        </Tooltip>
+                    </ListItem>
                 )}
 
                 {/* Upload progress */}
@@ -181,7 +193,7 @@ const DialogUploadFile = ({open, onClose, title}) => {
 
                 {/* Upload error */}
                 {uploadError && (
-                    <Box sx={{ mt: 2, color: 'error.main', display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Box sx={{ mt: 1, color: 'error.main', display: 'flex', alignItems: 'center', gap: 1 }}>
                         <ErrorOutline/>
                         <Typography variant="body2">{uploadError}</Typography>
                     </Box>

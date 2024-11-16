@@ -1,9 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import MyAppBar from "../../components/admin/appbar/MyAppBar";
 import EnhancedTable from "./student/EnhancedTable";
 
-import { Box, Typography, TextField, IconButton, Card, Stack, AvatarGroup, Avatar } from "@mui/material";
+import { 
+    Box, 
+    Typography, 
+    TextField, 
+    IconButton, 
+    Card, 
+    Stack, 
+    AvatarGroup, 
+    Avatar,
+    Button,
+    Grid2,
+} from "@mui/material";
+
+import {
+    Add as AddIcon,
+    Edit as EditIcon,
+    Delete as DeleteIcon,
+    Search as SearchIcon,
+    FileUpload as FileUploadIcon,
+    FileDownload as FileDownloadIcon,
+} from '@mui/icons-material';
+
 import { useTheme } from '@mui/material/styles';
+import DialogUploadFile from "../../components/admin/dialog/DialogUploadFile";
+import DialogAddNew from "../../components/admin/dialog/DialogAddNew";
 
 function createData(studentCode, name, classOfStudent, dateOfBirth, lastAction) {
     return {
@@ -18,6 +41,28 @@ function createData(studentCode, name, classOfStudent, dateOfBirth, lastAction) 
 const StudentManagement = () => {
 
     const theme = useTheme();
+
+    // State cho dialog thêm mới câu hỏi từ file
+    const [ openDialogUploadFile, setOpenDialogUploadFile ] = useState(false);
+    const [ openDialogAddStudent, setOpenDialogAddStudent ] = useState()
+    const [ selectedFile, setSelectedFile ] = useState(null);
+
+    // Xử lý mở dialog thêm mới sinh viên
+    const handleOpenDialogAddStudent = () => setOpenDialogAddStudent(true);
+
+    const handleCloseDialogAddStudent = () => {
+        setOpenDialogAddStudent(false);
+    }
+
+    // Xử lý mở dialog upload file
+    const handleOpenDialogUploadFile = () => setOpenDialogUploadFile(true);
+
+    // Xử lý khi đóng hộp thoại upload file
+    const handleCloseDialogUploadFile = () => {
+        setOpenDialogUploadFile(false);
+        // Đặt lại giá trị của file khi đóng hộp thoại
+        setSelectedFile(null);
+    }
 
     return (
         <div className="" style={{position: 'relative'}}>
@@ -39,10 +84,10 @@ const StudentManagement = () => {
                         <Typography variant="body2">+4</Typography>
                         </Stack>
                         <Typography variant="body2" color="textSecondary">
-                        10 Files
+                        45 sinh viên
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                        Teacher: Leona Jimenez
+                        Giảng viên: Nguyễn Văn A
                         </Typography>
                         <AvatarGroup max={4}>
                             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ bgcolor: 'red'}} />
@@ -74,7 +119,30 @@ const StudentManagement = () => {
                             />
                     </Box>
                     <Typography variant="body2" color="textSecondary">
-                    12 May 2022, Friday
+                    <Grid2 container spacing={1}>
+                        <Grid2 item>
+                            <Button
+                                fullWidth
+                                variant="contained"
+                                startIcon={<AddIcon />}
+                                onClick={() => handleOpenDialogAddStudent()}
+                                sx={{textTransform: 'none'}}
+                            >
+                                Thêm mới
+                            </Button>
+                        </Grid2>
+                        <Grid2>
+                            <Button
+                                fullWidth
+                                variant="contained"
+                                startIcon={<FileUploadIcon />}
+                                onClick={() => handleOpenDialogUploadFile()}
+                                sx={{textTransform: 'none'}}
+                            >
+                                Tải lên file câu hỏi
+                            </Button>
+                        </Grid2>
+                    </Grid2>
                 </Typography>
             </Box>
 
@@ -82,7 +150,10 @@ const StudentManagement = () => {
             <Box sx={{ml: 3, mr: 3 }}>
                 <EnhancedTable/>
             </Box>
+            <DialogUploadFile open={openDialogUploadFile} onClose={handleCloseDialogUploadFile} title={"Tải lên file danh sách sinh viên"}/>
 
+            {/* Dialog them moi sinh vien */}
+            <DialogAddNew open={openDialogAddStudent} onClose={handleCloseDialogAddStudent} title={"Thêm mới sinh viên"}/>
         </div>
     );
 }
