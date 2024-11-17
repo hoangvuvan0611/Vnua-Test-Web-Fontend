@@ -55,7 +55,7 @@ const LockedIcon = (props) => (
 );
 
 // Component cho mỗi hàng và phần collapse
-const Row = ({ row, index }) => {
+const Row = ({ row, index, onDeleteQuestion }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -88,7 +88,7 @@ const Row = ({ row, index }) => {
                 </IconButton>
             </Tooltip>
             <Tooltip title="Xóa câu hỏi">
-                <IconButton color='error'>
+                <IconButton color='error' onClick={onDeleteQuestion}>
                     <DeletePutBackIcon/>
                 </IconButton>
             </Tooltip>
@@ -140,7 +140,7 @@ const Row = ({ row, index }) => {
 const DEFAULT_ROWS_PER_PAGE = 10;
 
 // Component chính
-const QuestionTable = () => {
+const QuestionTable = ({ onDeleteQuestion }) => {
   // States for filtering, sorting and searching
   const [searchTerm, setSearchTerm] = useState("");
   const [filterSubject, setFilterSubject] = useState("");
@@ -440,7 +440,7 @@ const QuestionTable = () => {
               </TableRow>
             ) : (
               filteredAndSortedRows.map((row, index) => (
-                <Row key={index} row={row} index={index + 1} />
+                <Row key={index} row={row} index={index + 1} onDeleteQuestion={onDeleteQuestion}/>
               ))
             )}
           </TableBody>

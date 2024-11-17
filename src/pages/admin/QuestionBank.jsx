@@ -6,13 +6,6 @@ import {
     Typography,
     TextField,
     Button,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    IconButton,
     Dialog,
     DialogTitle,
     DialogContent,
@@ -73,11 +66,6 @@ const QuestionBank = () => {
         setOpenDialogUploadFile(false);
         // Đặt lại giá trị của file khi đóng hộp thoại
         setSelectedFile(null);
-    }
-
-    // Xử lý khi chọn tệp
-    const handleFileSelect = (event) => {
-
     }
 
     // State cho tìm kiếm và lọc
@@ -149,63 +137,62 @@ const QuestionBank = () => {
         setQuestions(questions.filter(q => q.id !== id));
     };
 
-        // Dữ liệu mẫu
-        const rows = [
-            {
-                id: '234342',
-                content: 'Đâu là thủ đô của Việt Nam?',
-                subject: 'Địa lý',
-                chapter: 'Chương 1',
-                type: '1 đáp án',
-                level: 'Dễ',
-                answers: [
-                    {
-                    content: 'Hà Nội',
-                    isCorrect: true,
-                    explanation: 'Hà Nội là thủ đô của Việt Nam từ năm 1945'
-                    },
-                    {
-                    content: 'TP. Hồ Chí Minh',
-                    isCorrect: false,
-                    explanation: 'TP. Hồ Chí Minh là thành phố lớn nhất nhưng không phải thủ đô'
-                    },
-                    {
-                    content: 'Đà Nẵng',
-                    isCorrect: false,
-                    explanation: 'Đà Nẵng là thành phố trực thuộc trung ương'
-                    },
-                ],
-            },
-            {
-                id: '234362',
-                content: 'Quá trình nào sau đây là quá trình tổng hợp?',
-                subject: 'Hóa học',
-                chapter: 'Chương 2',
-                type: '1 đáp án',
-                level: 'Khó',
-                answers: [
-                    {
-                    content: '2H2 + O2 → 2H2O',
-                    isCorrect: true,
-                    explanation: 'Đây là phản ứng tổng hợp nước từ khí H2 và O2'
-                    },
-                    {
-                    content: 'CaCO3 → CaO + CO2',
-                    isCorrect: false,
-                    explanation: 'Đây là phản ứng phân hủy'
-                    },
-                ],
-            },
-        ];
-
     // Lọc câu hỏi
-    const filteredQuestions = rows.filter(question => {
+    const filteredQuestions = questions.filter(question => {
         const matchesSearch = question.content.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesSubject = filterSubject === 'all' || question.subject === filterSubject;
         const matchesLevel = filterLevel === 'all' || question.level === filterLevel;
         return matchesSearch && matchesSubject && matchesLevel;
     });
 
+    // Dữ liệu mẫu
+    const rows = [
+        {
+            id: '234342',
+            content: 'Đâu là thủ đô của Việt Nam?',
+            subject: 'Địa lý',
+            chapter: 'Chương 1',
+            type: '1 đáp án',
+            level: 'Dễ',
+            answers: [
+                {
+                content: 'Hà Nội',
+                isCorrect: true,
+                explanation: 'Hà Nội là thủ đô của Việt Nam từ năm 1945'
+                },
+                {
+                content: 'TP. Hồ Chí Minh',
+                isCorrect: false,
+                explanation: 'TP. Hồ Chí Minh là thành phố lớn nhất nhưng không phải thủ đô'
+                },
+                {
+                content: 'Đà Nẵng',
+                isCorrect: false,
+                explanation: 'Đà Nẵng là thành phố trực thuộc trung ương'
+                },
+            ],
+        },
+        {
+            id: '234362',
+            content: 'Quá trình nào sau đây là quá trình tổng hợp?',
+            subject: 'Hóa học',
+            chapter: 'Chương 2',
+            type: '1 đáp án',
+            level: 'Khó',
+            answers: [
+                {
+                content: '2H2 + O2 → 2H2O',
+                isCorrect: true,
+                explanation: 'Đây là phản ứng tổng hợp nước từ khí H2 và O2'
+                },
+                {
+                content: 'CaCO3 → CaO + CO2',
+                isCorrect: false,
+                explanation: 'Đây là phản ứng phân hủy'
+                },
+            ],
+        },
+    ];
 
     return (
         <div style={{ position: 'relative' }}>
@@ -216,47 +203,6 @@ const QuestionBank = () => {
             <Box sx={{ p: 3 }}>
                 {/* Thanh tác vụ */}
                 <Grid2 container spacing={2} alignItems="center" sx={{ mb: 3}}>
-                    <Grid2 item xs={12} md={4}>
-                        <TextField
-                            fullWidth
-                            placeholder="Tìm kiếm câu hỏi..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            InputProps={{
-                                startAdornment: <SearchIcon sx={{ color: 'action.active', mr: 1 }} />,
-                            }}
-                        />
-                    </Grid2>
-                    <Grid2 item xs={12} md={2}>
-                        <FormControl fullWidth>
-                            <InputLabel>Môn học</InputLabel>
-                            <Select
-                                value={filterSubject}
-                                label="Môn học"
-                                onChange={(e) => setFilterSubject(e.target.value)}
-                            >
-                                <MenuItem value="all">Tất cả</MenuItem>
-                                <MenuItem value="math">Toán học</MenuItem>
-                                <MenuItem value="physics">Vật lý</MenuItem>
-                                <MenuItem value="chemistry">Hóa học</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid2>
-                    <Grid2 item xs={12} md={2}>
-                        <FormControl fullWidth>
-                            <InputLabel>Độ khó</InputLabel>
-                            <Select
-                                value={filterLevel}
-                                label="Độ khó"
-                                onChange={(e) => setFilterLevel(e.target.value)}
-                            >
-                                <MenuItem value="all">Tất cả</MenuItem>
-                                <MenuItem value="easy">Dễ</MenuItem>
-                                <MenuItem value="medium">Trung bình</MenuItem>
-                                <MenuItem value="hard">Khó</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid2>
                     <Grid2 item xs={12} md={4}>
                         <Grid2 container spacing={1}>
                             <Grid2 item xs={4}>
@@ -295,66 +241,8 @@ const QuestionBank = () => {
                     </Grid2>
                 </Grid2>
 
-                <QuestionAnswerTable rowData={filteredQuestions}/>
-
-                {/* Bảng câu hỏi */}
-                {/* <TableContainer component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>STT</TableCell>
-                                <TableCell>Nội dung</TableCell>
-                                <TableCell>Môn học</TableCell>
-                                <TableCell>Chương</TableCell>
-                                <TableCell>Loại</TableCell>
-                                <TableCell>Độ khó</TableCell>
-                                <TableCell align="center">Thao tác</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {filteredQuestions.map((question, index) => (
-                                <TableRow key={question.id}>
-                                    <TableCell>{index + 1}</TableCell>
-                                    <TableCell>{question.content}</TableCell>
-                                    <TableCell>{question.subject}</TableCell>
-                                    <TableCell>{question.chapter}</TableCell>
-                                    <TableCell>
-                                        <Chip
-                                            label={question.type === 'single' ? 'Một đáp án' : 'Nhiều đáp án'}
-                                            color="primary"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Chip
-                                            label={
-                                                question.level === 'easy' ? 'Dễ' :
-                                                    question.level === 'medium' ? 'Trung bình' : 'Khó'
-                                            }
-                                            color={
-                                                question.level === 'easy' ? 'success' :
-                                                    question.level === 'medium' ? 'warning' : 'error'
-                                            }
-                                        />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <IconButton
-                                            onClick={() => handleOpenDialog(question)}
-                                        >
-                                            <EditIcon />
-                                        </IconButton>
-                                        <IconButton
-                                            color="error"
-                                            onClick={() => handleDeleteQuestion(question.id)}
-                                        >
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer> */}
+                {/* Bang cau hoi */}
+                <QuestionAnswerTable rowData={filteredQuestions} onDeleteQuestion={handleDeleteQuestion}/>
 
                 {/* Dialog thêm/sửa câu hỏi */}
                 <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth>
@@ -485,7 +373,7 @@ const QuestionBank = () => {
                 </Dialog>
 
                 {/* Dialog import file cau hoi */}
-                <DialogUploadFile open={openDialogUploadFile} onClose={handleCloseDialogUploadFile} title={"Tải file lên file câu hỏi"}/>
+                <DialogUploadFile open={openDialogUploadFile} onClose={handleCloseDialogUploadFile} title={"Tải lên file câu hỏi"}/>
             </Box>
         </div>
     );
