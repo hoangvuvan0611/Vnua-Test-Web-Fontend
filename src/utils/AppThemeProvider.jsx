@@ -52,7 +52,18 @@ const AppThemeProvider = ({children}) => {
                     }
                 } 
             )
-        }
+        },
+        components: {
+            MuiInputLabel: {
+                styleOverrides: {
+                    root: {
+                        '&.Mui-focused': {
+                            color: 'green', // Màu nhãn khi focus
+                        },
+                    },
+                },
+            },
+        },
     });
 
 

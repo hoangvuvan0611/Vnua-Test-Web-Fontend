@@ -2,7 +2,6 @@ import React from "react";
 import MyAppBar from "../../components/admin/appbar/MyAppBar";
 import { Avatar, Button, Card, CardContent, Chip, Grid2, IconButton, List, ListItem, Table, TableBody, TableCell, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
-import logoSubject from '../../assets/images/logos/Thesis-rafiki.svg';
 import { green } from "@mui/material/colors";
 import { BookmarkBorderOutlined, Delete, DeleteForever, EditAttributes, EditNote, EditRoad } from "@mui/icons-material";
 
@@ -26,7 +25,7 @@ const SubjectManagement = () => {
             </div>
 
             {/* Welcome Section */}
-            <Grid2 sx={{ bgcolor: theme.palette.mode === 'dark' ? 'rgb(100, 150, 230)' : 'rgb(100, 150, 230)', height: 200, borderRadius: 2, p: 3, display: 'flex', 
+            {/* <Grid2 sx={{ bgcolor: theme.palette.mode === 'dark' ? 'rgb(100, 150, 230)' : 'rgb(100, 150, 230)', height: 200, borderRadius: 2, p: 3, display: 'flex', 
                 alignItems: 'center', mt: 2, mb: 4, position: 'relative', ml: 3, mr: 3 }}>
                 <Grid2 sx={{marginLeft: 10, xs: 12, md: 3}}>
                     <Typography variant="h4" fontWeight="bold" color="white">Học</Typography>
@@ -39,13 +38,13 @@ const SubjectManagement = () => {
                 </Grid2>
                 <Grid2 component="img" src={logoSubject} alt="Illustration" className="sm-hide"
                 sx={{ width: 220, marginLeft: 'auto', position: '', right: 10, xs: 12, md: 6, marginRight: 10}}/>
-            </Grid2>
+            </Grid2> */}
 
             {/* Subject Card session */}
-            <Grid2 container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12, xl: 12 }} sx={{ml: 3, mr: 3}}>
+            <Grid2 container spacing={{ xs: 2, md: 3 }} sx={{ml: 3, mr: 3, mt: 3, mb: 3}}>
                 {Array.from(Array(6)).map((_, index) => (
-                    <Grid2 key={index} size={{ xs: 2, sm: 4, md: 4, xl: 3 }}>
-                        <Card sx={{ maxWidth: 400, margin: 'auto', borderRadius: 2, boxShadow: 3, padding: 2 }}>
+                    <Grid2 key={index} size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 3}}>
+                        <Card sx={{borderRadius: 2, boxShadow: 3, padding: 0}}>
                             <CardContent>
                                 <Grid2 container justifyContent="space-between" alignItems="center">
                                     <Grid2 size={3}>
@@ -59,14 +58,8 @@ const SubjectManagement = () => {
                                         </Typography>
                                     </Grid2>
                                 </Grid2>
-                                <Typography variant="subtitle2" color="textSecondary">
-                                Order #925 / Dine In
-                                </Typography>
                                 <Typography variant="body2" color="textSecondary" gutterBottom>
                                 Wed, July 12, 2023
-                                </Typography>
-                                <Typography variant="body2" color="textSecondary" align="right">
-                                06:12 PM
                                 </Typography>
                                 <Table size="small">
                                     <TableHead>
@@ -89,7 +82,7 @@ const SubjectManagement = () => {
                                     </TableBody>
                                 </Table>
 
-                                <Grid2 container alignItems={'center'} justifyContent={'space-around'}  sx={{ mt: 2 }}>
+                                <Grid2 container alignItems={'center'} justifyContent={'space-around'}  sx={{ mt: 1 }}>
                                     <Grid2 item xs={6}>
                                         <Button variant="contained" fullWidth>
                                         Xem chi tiết
@@ -100,7 +93,7 @@ const SubjectManagement = () => {
                                             <ListItem>
                                                 <Tooltip title="Sửa">
                                                     <IconButton>
-                                                        <EditNote color="warning"/>
+                                                        <EditNote color="secondary"/>
                                                     </IconButton>
                                                 </Tooltip>
                                                 <Tooltip title="Xóa">

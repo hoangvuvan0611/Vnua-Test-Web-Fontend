@@ -58,7 +58,7 @@ function Sidebar({isOpen, onToggle}) {
                             </nav>
                         </div>
 
-                        <div className="sidebar-logo-support rounded-xl text-center">
+                        {/* <div className="sidebar-logo-support rounded-xl text-center">
                             <div className="mb-1">
                                 <img alt="Support for service" src={logoSupport} style={{width: '200px', height: '80px'}}/>
                             </div>
@@ -68,7 +68,7 @@ function Sidebar({isOpen, onToggle}) {
                             <div>
                                 <p className="text-xs text-gray-600">Đang có một số vấn đề với phần mềm mà bạn đang gặp phải?</p>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Team Members */}
                         {/* <div className="mt-4 ">

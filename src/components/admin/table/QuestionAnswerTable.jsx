@@ -23,12 +23,17 @@ import {
   FormControlLabel,
   Switch,
   Tooltip,
+  Checkbox,
+  Toolbar,
+  alpha,
 } from "@mui/material";
 import {
   KeyboardArrowDown as KeyboardArrowDownIcon,
   KeyboardArrowUp as KeyboardArrowUpIcon,
   Search as SearchIcon,
   FilterList as FilterListIcon,
+  CheckBox,
+  Delete,
 } from "@mui/icons-material";
 
 const PropertyEditIcon = (props) => (
@@ -55,12 +60,30 @@ const LockedIcon = (props) => (
 );
 
 // Component cho mỗi hàng và phần collapse
-const Row = ({ row, index, onDeleteQuestion }) => {
+const Row = ({ row, index, onDeleteQuestion, onEditQuestion, onToggleLock, selected, handleClick, isSelected }) => {
   const [open, setOpen] = useState(false);
+  const labelId = `enhanced-table-checkbox-${index}`;
 
   return (
     <>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }} hover>
+      <TableRow
+        hover
+        role="checkbox"
+        aria-checked={isSelected}
+        tabIndex={-1}
+        selected={isSelected}
+        
+      >
+        <TableCell padding="checkbox">
+          <Checkbox
+            color="success"
+            checked={isSelected}
+            onChange={(event) => handleClick(event, row.id)}
+            inputProps={{
+              'aria-labelledby': labelId,
+            }}
+          />
+        </TableCell>
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -77,37 +100,37 @@ const Row = ({ row, index, onDeleteQuestion }) => {
         <TableCell>{row.type}</TableCell>
         <TableCell>{row.level}</TableCell>
         <TableCell>
-            <Tooltip title="Sửa câu hỏi">
-                <IconButton color='info'>
-                    <PropertyEditIcon/>
-                </IconButton>
-            </Tooltip>
-            <Tooltip title="Cho phép mọi người cùng thấy">
-                <IconButton color='secondary'>
-                    <LockedIcon/>
-                </IconButton>
-            </Tooltip>
-            <Tooltip title="Xóa câu hỏi">
-                <IconButton color='error' onClick={onDeleteQuestion}>
-                    <DeletePutBackIcon/>
-                </IconButton>
-            </Tooltip>
+          <Tooltip title="Sửa câu hỏi">
+            <IconButton color="info" onClick={() => onEditQuestion(row.id)}>
+              <PropertyEditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Cho phép mọi người cùng thấy">
+            <IconButton color="secondary" onClick={() => onToggleLock(row.id)}>
+              <LockedIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Xóa câu hỏi">
+            <IconButton color="error" onClick={() => onDeleteQuestion(row.id)}>
+              <DeletePutBackIcon />
+            </IconButton>
+          </Tooltip>
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="body1" gutterBottom component="div" sx={{fontWeight: 'bold'}}>
+              <Typography variant="body1" gutterBottom component="div" sx={{ fontWeight: 'bold' }}>
                 Đáp án
               </Typography>
               <Table size="small" aria-label="answers">
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{fontWeight: 'bold'}}>Lựa chọn</TableCell>
-                    <TableCell sx={{fontWeight: 'bold'}}>Nội dung</TableCell>
-                    <TableCell sx={{fontWeight: 'bold'}}>Đúng/Sai</TableCell>
-                    <TableCell sx={{fontWeight: 'bold'}}>Giải thích</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Lựa chọn</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Nội dung</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Đúng/Sai</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Giải thích</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -136,6 +159,54 @@ const Row = ({ row, index, onDeleteQuestion }) => {
   );
 };
 
+// Table Toolbar Component
+const EnhancedTableToolbar = ({ numSelected }) => (
+  <Toolbar
+    sx={{
+      pl: { sm: 2 },
+      pr: { xs: 1, sm: 1 },
+      ...(numSelected > 0 && {
+        bgcolor: (theme) =>
+          alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+      }),
+    }}
+  >
+    {numSelected > 0 ? (
+      <Typography
+        sx={{ flex: '1 1 100%' }}
+        color="inherit"
+        variant="subtitle1"
+        component="div"
+      >
+        {numSelected} đã chọn
+      </Typography>
+    ) : (
+      <Typography
+        sx={{ flex: '1 1 100%' }}
+        variant="h6"
+        id="tableTitle"
+        component="div"
+      >
+        Danh sách câu hỏi
+      </Typography>
+    )}
+
+    {numSelected > 0 ? (
+      <Tooltip title="Delete">
+        <IconButton>
+          <Delete />
+        </IconButton>
+      </Tooltip>
+    ) : (
+      <Tooltip title="Lọc danh sách">
+        <IconButton>
+          <FilterListIcon />
+        </IconButton>
+      </Tooltip>
+    )}
+  </Toolbar>
+);
+
 // Constants
 const DEFAULT_ROWS_PER_PAGE = 10;
 
@@ -161,6 +232,7 @@ const QuestionTable = ({ onDeleteQuestion }) => {
   // Dữ liệu mẫu
   const initialRows = [
     {
+      id: "14334",
       content: "Đâu là thủ đô của Việt Nam?",
       subject: "Địa lý",
       chapter: "Chương 1",
@@ -186,6 +258,7 @@ const QuestionTable = ({ onDeleteQuestion }) => {
       ],
     },
     {
+      id: "14335",
       content: "Quá trình nào sau đây là quá trình tổng hợp?",
       subject: "Hóa học",
       chapter: "Chương 2",
@@ -201,25 +274,6 @@ const QuestionTable = ({ onDeleteQuestion }) => {
           content: "CaCO3 → CaO + CO2",
           isCorrect: false,
           explanation: "Đây là phản ứng phân hủy",
-        },
-      ],
-    },
-    {
-      content: "Phép tính nào sau đây đúng?",
-      subject: "Toán",
-      chapter: "Chương 1",
-      type: "1 đáp án đúng",
-      level: "Trung bình",
-      answers: [
-        {
-          content: "2 + 2 = 4",
-          isCorrect: true,
-          explanation: "Đây là phép tính cộng cơ bản",
-        },
-        {
-          content: "2 + 2 = 5",
-          isCorrect: false,
-          explanation: "Kết quả này không đúng",
         },
       ],
     },
@@ -272,6 +326,41 @@ const QuestionTable = ({ onDeleteQuestion }) => {
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
+
+  const [selected, setSelected] = React.useState([]);
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelected = initialRows.map((n) => n.id);
+      setSelected(newSelected);
+      return;
+    }
+    setSelected([]);
+  };
+
+  // Xử lý chọn một dòng
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = [...selected, id];
+    } else if (selectedIndex === 0) {
+      newSelected = selected.slice(1);
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = selected.slice(0, -1);
+    } else if (selectedIndex > 0) {
+      newSelected = [
+        ...selected.slice(0, selectedIndex),
+        ...selected.slice(selectedIndex + 1),
+      ];
+    }
+
+    setSelected(newSelected);
+  };
+
+  // Kiểm tra một dòng có được chọn không
+  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -358,6 +447,7 @@ const QuestionTable = ({ onDeleteQuestion }) => {
       </Paper>
 
       {/* Table */}
+      <EnhancedTableToolbar numSelected={selected.length}/>
       <TableContainer component={Paper}>
         <FormControlLabel
             control={<Switch checked={dense} color="success" onChange={handleChangeDense} />}
@@ -367,7 +457,22 @@ const QuestionTable = ({ onDeleteQuestion }) => {
         <Table aria-label="collapsible table" size={dense ? 'small' : 'medium'}>
           <TableHead>
             <TableRow>
-              <TableCell />
+              <TableCell padding="checkbox">
+                <Checkbox
+                  color="success"
+                  indeterminate={selected.length > 0 && selected.length < initialRows.length}
+                  checked={initialRows.length > 0 && selected.length === initialRows.length}
+                  onChange={handleSelectAllClick}
+                  inputProps={{
+                    'aria-label': 'select all desserts',
+                  }}
+                />
+              </TableCell>
+              <TableCell
+                sx={{fontWeight:"bold"}}
+              >
+                Phương án
+              </TableCell>
               <TableCell>
                 <TableSortLabel
                   active={orderBy === "content"}
@@ -440,7 +545,15 @@ const QuestionTable = ({ onDeleteQuestion }) => {
               </TableRow>
             ) : (
               filteredAndSortedRows.map((row, index) => (
-                <Row key={index} row={row} index={index + 1} onDeleteQuestion={onDeleteQuestion}/>
+                <Row 
+                  key={index} 
+                  row={row} 
+                  index={index + 1} 
+                  onDeleteQuestion={onDeleteQuestion} 
+                  selected={selected} 
+                  handleClick={handleClick} 
+                  isSelected={isSelected(row.id)}
+                />
               ))
             )}
           </TableBody>

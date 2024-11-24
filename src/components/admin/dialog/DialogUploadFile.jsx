@@ -27,6 +27,7 @@ import {
     Grid,
     Divider,
     TablePagination,
+    Grid2,
 } from '@mui/material';
 import {
     CloudUpload as CloudUploadIcon,
@@ -66,7 +67,7 @@ const uploadAnimation = keyframes`
 `;
 
 // Component cho mỗi hàng có thể mở rộng
-const Row = ({ row, index }) => {
+const Row = ({ row, index, pages, rowsPerPage }) => {
     const [open, setOpen] = useState(false);
 
     return (
@@ -81,7 +82,7 @@ const Row = ({ row, index }) => {
                     </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row">
-                    {index + 1}
+                    {((pages) * rowsPerPage) + index + 1}
                 </TableCell>
                 <TableCell>{row.question}</TableCell>
                 <TableCell align="right">{row.answers?.length || 0} câu trả lời</TableCell>
@@ -105,7 +106,7 @@ const Row = ({ row, index }) => {
                                     {row.answers?.map((answer, answerIndex) => (
                                         <TableRow key={answerIndex}>
                                             <TableCell>{answerIndex + 1}</TableCell>
-                                            <TableCell>{answer.content}</TableCell>
+                                            <TableCell>{answer}</TableCell>
                                             <TableCell align="right">
                                                 {answer.isCorrect ? (
                                                     <CheckCircleOutline color="success" />
@@ -180,6 +181,7 @@ const DialogUploadFile = ({ open, onClose, title }) => {
 
         try {
             const response = await api.post('/file/readFileQuestion', formData, uploadConfig);
+            console.log(response);
             setQuestions(response.data.dataList);
         } catch (error) {
             setUploadError("Có lỗi xảy ra khi tải lên. Vui lòng thử lại!");
@@ -194,9 +196,9 @@ const DialogUploadFile = ({ open, onClose, title }) => {
                 {title}
             </DialogTitle>
             <DialogContent>
-                <Grid container={questions.length > 0 ? true : false} spacing={1}>
+                <Grid2 container={questions.length > 0 ? true : false} spacing={1}>
                     {/* Upload Section */}
-                    <Grid item xs={12} md={3}>
+                    <Grid2 item xs={12} md={3}>
                         <Box sx={{ mb: 1 }}>
                             <Typography variant="subtitle2">
                                 Lưu ý:
@@ -294,10 +296,10 @@ const DialogUploadFile = ({ open, onClose, title }) => {
                                 {uploading ? 'Đang tải...' : "Tải file lên"}
                             </Button>
                         </Box>
-                    </Grid>
+                    </Grid2>
 
                     {/* Questions Table Section */}
-                    {questions.length > 0 ? (
+                    {/* {questions.length > 0 ? (
                         <Grid item xs={12} md={9}>
                             <Typography variant="body1" gutterBottom>
                                 Danh sách {questions.length} câu hỏi
@@ -316,7 +318,7 @@ const DialogUploadFile = ({ open, onClose, title }) => {
                                         {questions
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                             .map((question, index) => (
-                                            <Row key={index} row={question} index={index} />
+                                            <Row key={index} row={question} index={index} pages={page} rowsPerPage={rowsPerPage}/>
                                         ))}
                                     </TableBody>
                                 </Table>
@@ -351,8 +353,8 @@ const DialogUploadFile = ({ open, onClose, title }) => {
                                 </Button>
                             </DialogActions>
                         </Grid>
-                    ) : null}
-                </Grid>
+                    ) : null} */}
+                </Grid2>
             </DialogContent>
         </Dialog>
     );
